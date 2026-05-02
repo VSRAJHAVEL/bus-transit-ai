@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}Analytics — BUS TRANSIT AI{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="page-badge">Data Intelligence</span>
+        <h1 class="page-title">Analytics <span class="accent">Dashboard</span></h1>
+        <p class="page-desc">Explore network statistics, ML model performance, and route efficiency across Coimbatore's TNSTC bus network.</p>
+    </div>
+</section>
+
+<section class="analytics-section">
+    <div class="container">
+        <!-- Stats Overview -->
+        <div class="analytics-stats-grid" id="analytics-stats">
+            <div class="analytics-stat glass-card">
+                <div class="analytics-stat-icon green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <div class="analytics-stat-data">
+                    <div class="analytics-stat-number">{{ stats.total_stops }}</div>
+                    <div class="analytics-stat-label">Total Bus Stops</div>
+                </div>
+            </div>
+            <div class="analytics-stat glass-card">
+                <div class="analytics-stat-icon cyan">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <div class="analytics-stat-data">
+                    <div class="analytics-stat-number">{{ stats.total_routes }}</div>
+                    <div class="analytics-stat-label">TNSTC Routes</div>
+                </div>
+            </div>
+            <div class="analytics-stat glass-card">
+                <div class="analytics-stat-icon purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <div class="analytics-stat-data">
+                    <div class="analytics-stat-number">{{ stats.total_edges }}</div>
+                    <div class="analytics-stat-label">Network Edges</div>
+                </div>
+            </div>
+            <div class="analytics-stat glass-card">
+                <div class="analytics-stat-icon orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="analytics-stat-data">
+                    <div class="analytics-stat-number">{{ stats.avg_connections }}</div>
+                    <div class="analytics-stat-label">Avg Connections/Stop</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row 1 -->
+        <div class="charts-grid">
+            <div class="chart-card glass-card" id="chart-peak">
+                <h4 class="chart-title">Peak vs Off-Peak Analysis</h4>
+                <p class="chart-subtitle">Average delay and passenger load by hour of day</p>
+                <div class="chart-container">
+                    <canvas id="peakChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card glass-card" id="chart-stops">
+                <h4 class="chart-title">Top Connected Stops</h4>
+                <p class="chart-subtitle">Bus stops ranked by network connectivity</p>
+                <div class="chart-container">
+                    <canvas id="stopsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row 2 -->
+        <div class="charts-grid">
+            <div class="chart-card glass-card" id="chart-efficiency">
+                <h4 class="chart-title">Route Efficiency</h4>
+                <p class="chart-subtitle">Average speed (km/h) by route</p>
+                <div class="chart-container">
+                    <canvas id="efficiencyChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card glass-card" id="chart-model">
+                <h4 class="chart-title">ML Model Performance</h4>
+                <p class="chart-subtitle">Ensemble model accuracy metrics</p>
+                <div class="model-info" id="model-info">
+                    <div class="model-metric">
+                        <span class="metric-label">Model Type</span>
+                        <span class="metric-value">{{ model_info.model_type }}</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Estimators</span>
+                        <div class="metric-tags">
+                            {% for est in model_info.estimators %}
+                            <span class="metric-tag">{{ est }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if model_info.metrics %}
+                    <div class="model-metric highlight">
+                        <span class="metric-label">R² Score</span>
+                        <span class="metric-value accent">{{ model_info.metrics.r2_score }}</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">MAE</span>
+                        <span class="metric-value">{{ model_info.metrics.mae }} min</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Training Samples</span>
+                        <span class="metric-value">{{ model_info.metrics.train_samples }}</span>
+                    </div>
+                    <div class="model-metric">
+                        <span class="metric-label">Test Samples</span>
+                        <span class="metric-value">{{ model_info.metrics.test_samples }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="model-features">
+                        <span class="metric-label">Features Used</span>
+                        <div class="feature-tags">
+                            {% if model_info.metrics and model_info.metrics.features %}
+                            {% for f in model_info.metrics.features %}
+                            <span class="feature-tag">{{ f }}</span>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Route Table -->
+        <div class="route-table-card glass-card" id="route-table-card">
+            <h4 class="chart-title">TNSTC Route Directory</h4>
+            <p class="chart-subtitle">Complete listing of Coimbatore bus routes with performance data</p>
+            <div class="table-scroll">
+                <table class="data-table" id="route-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Name</th>
+                            <th>Operator</th>
+                            <th>Type</th>
+                            <th>Stops</th>
+                            <th>Distance</th>
+                            <th>Avg Time</th>
+                            <th>Avg Speed</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody id="route-table-body">
+                        <!-- Filled dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initAnalytics();
+    });
+</script>
+{% endblock %}

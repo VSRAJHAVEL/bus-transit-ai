@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Route Finder — BUS TRANSIT AI{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="page-badge">AI Route Optimization</span>
+        <h1 class="page-title">Route <span class="accent">Finder</span></h1>
+        <p class="page-desc">Find the optimal bus route across Coimbatore's TNSTC network using Dijkstra & A* algorithms.</p>
+    </div>
+</section>
+
+<section class="route-finder-section">
+    <div class="container">
+        <div class="rf-layout">
+            <!-- Search Panel -->
+            <div class="rf-panel glass-card" id="search-panel">
+                <h3 class="panel-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    Find Your Route
+                </h3>
+                
+                <div class="rf-form">
+                    <!-- Source -->
+                    <div class="form-group" id="source-group">
+                        <label class="form-label">
+                            <span class="label-dot green"></span>
+                            Source Stop
+                        </label>
+                        <div class="autocomplete-wrapper">
+                            <input type="text" id="source-input" class="form-input" placeholder="e.g. Gandhipuram Bus Stand" autocomplete="off">
+                            <div class="autocomplete-dropdown" id="source-dropdown"></div>
+                        </div>
+                        <input type="hidden" id="source-id">
+                    </div>
+                    
+                    <!-- Swap Button -->
+                    <button class="swap-btn" id="swap-btn" title="Swap source and destination">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Destination -->
+                    <div class="form-group" id="dest-group">
+                        <label class="form-label">
+                            <span class="label-dot red"></span>
+                            Destination Stop
+                        </label>
+                        <div class="autocomplete-wrapper">
+                            <input type="text" id="dest-input" class="form-input" placeholder="e.g. Singanallur Bus Stand" autocomplete="off">
+                            <div class="autocomplete-dropdown" id="dest-dropdown"></div>
+                        </div>
+                        <input type="hidden" id="dest-id">
+                    </div>
+                    
+                    <!-- Strategy -->
+                    <div class="form-group">
+                        <label class="form-label">Optimization Strategy</label>
+                        <div class="strategy-tabs" id="strategy-tabs">
+                            <button class="strategy-tab active" data-strategy="fastest" id="tab-fastest">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                                Fastest
+                            </button>
+                            <button class="strategy-tab" data-strategy="shortest" id="tab-shortest">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                Shortest
+                            </button>
+                            <button class="strategy-tab" data-strategy="least_transfers" id="tab-transfers">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="3"/>
+                                    <path d="M3 10h18"/>
+                                </svg>
+                                Fewest Transfers
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Button -->
+                    <button class="btn btn-primary btn-full" id="find-route-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12h4l3 9 4-18 3 9h4"/>
+                        </svg>
+                        Find Optimal Route
+                    </button>
+                </div>
+                
+                <!-- Results -->
+                <div class="rf-results" id="rf-results" style="display: none;">
+                    <div class="results-header">
+                        <h4 class="results-title">Optimal Route Found</h4>
+                        <span class="results-algo" id="results-algo"></span>
+                    </div>
+                    
+                    <div class="results-stats" id="results-stats">
+                        <!-- Filled dynamically -->
+                    </div>
+                    
+                    <div class="results-bus" id="results-bus">
+                        <!-- Bus recommendation -->
+                    </div>
+                    
+                    <div class="results-timeline" id="results-timeline">
+                        <!-- Route timeline -->
+                    </div>
+                </div>
+                
+                <!-- Loading -->
+                <div class="rf-loading" id="rf-loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>Running Dijkstra's algorithm...</p>
+                </div>
+                
+                <!-- Error -->
+                <div class="rf-error" id="rf-error" style="display: none;"></div>
+            </div>
+            
+            <!-- Map Panel -->
+            <div class="rf-map-panel" id="map-panel">
+                <div class="map-container" id="route-map"></div>
+                <div class="map-legend" id="map-legend">
+                    <div class="legend-item"><span class="legend-dot green"></span> Source</div>
+                    <div class="legend-item"><span class="legend-dot red"></span> Destination</div>
+                    <div class="legend-item"><span class="legend-line"></span> Optimal Route</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initRouteFinder();
+    });
+</script>
+{% endblock %}

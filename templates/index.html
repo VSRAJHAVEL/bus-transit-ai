@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}BUS TRANSIT AI — Coimbatore Route Optimization System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" id="hero-section">
+    <div class="hero-bg">
+        <div class="grid-overlay"></div>
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    
+    <div class="hero-content">
+        <div class="hero-badge" id="hero-badge">
+            <span class="badge-dot"></span>
+            TNSTC Coimbatore • AI Powered
+        </div>
+        
+        <h1 class="hero-title" id="hero-title">
+            <span class="title-line">BUS TRANSIT</span>
+            <span class="title-line accent-glow">AI</span>
+        </h1>
+        
+        <p class="hero-subtitle" id="hero-subtitle">
+            Route Optimization System for Coimbatore City Buses
+        </p>
+        
+        <p class="hero-desc" id="hero-desc">
+            Engineered with <strong>ensemble machine learning</strong> and <strong>graph algorithms</strong> 
+            to predict optimal bus routes, deliver real-time ETAs, and optimize your daily commute 
+            across the TNSTC Coimbatore network.
+        </p>
+        
+        <div class="hero-actions" id="hero-actions">
+            <a href="/route-finder" class="btn btn-primary" id="cta-route-finder">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 8v8M8 12h8"/>
+                </svg>
+                Find Optimal Route
+            </a>
+            <a href="/live-eta" class="btn btn-glass" id="cta-live-eta">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                Live ETA Dashboard
+            </a>
+        </div>
+    </div>
+    
+    <!-- Hero Image -->
+    <div class="hero-visual" id="hero-visual">
+        <div class="visual-frame">
+            <img src="{{ url_for('static', filename='images/LandingPage.png') }}" alt="BUS TRANSIT AI System" class="hero-image">
+            <div class="visual-overlay"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section" id="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card" id="stat-stops">
+                <div class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.total_stops }}</div>
+                <div class="stat-label">Bus Stops</div>
+            </div>
+            
+            <div class="stat-card" id="stat-routes">
+                <div class="stat-icon cyan">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.total_routes }}</div>
+                <div class="stat-label">TNSTC Routes</div>
+            </div>
+            
+            <div class="stat-card" id="stat-edges">
+                <div class="stat-icon purple">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.total_edges }}</div>
+                <div class="stat-label">Network Edges</div>
+            </div>
+            
+            <div class="stat-card" id="stat-speed">
+                <div class="stat-icon orange">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="stat-number">&lt;2s</div>
+                <div class="stat-label">Prediction Speed</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" id="features-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Core Features</span>
+            <h2 class="section-title">Intelligent Transit Optimization</h2>
+            <p class="section-desc">Powered by cutting-edge AI and graph theory to transform your commute across Coimbatore's TNSTC bus network.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card" id="feature-route">
+                <div class="feature-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 12h4l3 9 4-18 3 9h4"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Route Optimization</h3>
+                <p class="feature-desc">Dijkstra & A* algorithms find the fastest, shortest, or least-transfer routes across 53+ stops in real-time.</p>
+                <a href="/route-finder" class="feature-link">Try Route Finder →</a>
+            </div>
+            
+            <div class="feature-card" id="feature-ml">
+                <div class="feature-icon cyan">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <path d="M8 21h8M12 17v4"/>
+                        <path d="M7 8l3 3 4-4 3 3"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Ensemble ML Prediction</h3>
+                <p class="feature-desc">Random Forest + Gradient Boosting ensemble predicts accurate travel times using traffic, weather & time features.</p>
+                <a href="/analytics" class="feature-link">View Analytics →</a>
+            </div>
+            
+            <div class="feature-card" id="feature-eta">
+                <div class="feature-icon purple">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Live ETA Tracking</h3>
+                <p class="feature-desc">Real-time arrival predictions for every TNSTC route with on-time, delayed, and late status indicators.</p>
+                <a href="/live-eta" class="feature-link">Check Live ETA →</a>
+            </div>
+            
+            <div class="feature-card" id="feature-graph">
+                <div class="feature-icon orange">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="6" cy="6" r="3"/>
+                        <circle cx="18" cy="6" r="3"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="18" r="3"/>
+                        <path d="M9 6h6M6 9v6M18 9v6M9 18h6"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Network Graph Analysis</h3>
+                <p class="feature-desc">NetworkX-powered weighted graph with {{ stats.total_edges }} edges models the complete Coimbatore transit network.</p>
+                <a href="/analytics" class="feature-link">Explore Graph →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack Section -->
+<section class="tech-section" id="tech-section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Technology</span>
+            <h2 class="section-title">Built with Modern AI Stack</h2>
+        </div>
+        
+        <div class="tech-grid">
+            <div class="tech-item">
+                <div class="tech-name">Flask</div>
+                <div class="tech-role">Web Framework</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Scikit-learn</div>
+                <div class="tech-role">Ensemble ML</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">NetworkX</div>
+                <div class="tech-role">Graph Algorithms</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Leaflet.js</div>
+                <div class="tech-role">Interactive Maps</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">Chart.js</div>
+                <div class="tech-role">Data Visualization</div>
+            </div>
+            <div class="tech-item">
+                <div class="tech-name">TNSTC Data</div>
+                <div class="tech-role">Real Bus Routes</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section" id="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <h2 class="cta-title">Ready to optimize your commute?</h2>
+            <p class="cta-desc">Find the fastest bus route across Coimbatore in under 2 seconds.</p>
+            <a href="/route-finder" class="btn btn-primary btn-lg" id="cta-final">
+                Launch Route Finder
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

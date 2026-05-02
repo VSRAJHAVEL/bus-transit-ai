@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Live ETA — BUS TRANSIT AI{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="page-badge">Real-Time Tracking</span>
+        <h1 class="page-title">Live <span class="accent">ETA</span></h1>
+        <p class="page-desc">Monitor real-time arrival predictions for TNSTC Coimbatore bus routes with ML-powered ETAs.</p>
+    </div>
+</section>
+
+<section class="eta-section">
+    <div class="container">
+        <div class="eta-layout">
+            <!-- Route Selector -->
+            <div class="eta-sidebar glass-card" id="eta-sidebar">
+                <h3 class="panel-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="3"/>
+                        <circle cx="8" cy="16" r="1.5"/>
+                        <circle cx="16" cy="16" r="1.5"/>
+                        <path d="M3 10h18"/>
+                    </svg>
+                    Select Route
+                </h3>
+                
+                <div class="route-search-wrap">
+                    <input type="text" id="route-search" class="form-input" placeholder="Search routes...">
+                </div>
+                
+                <div class="route-list" id="route-list">
+                    {% for route in routes %}
+                    <button class="route-item" data-route-id="{{ route.id }}" id="route-{{ route.id }}">
+                        <div class="route-badge" style="background: {{ route.color }}20; color: {{ route.color }}; border-color: {{ route.color }}40">
+                            {{ route.route_number }}
+                        </div>
+                        <div class="route-info">
+                            <div class="route-name">{{ route.name }}</div>
+                            <div class="route-meta">
+                                <span>{{ route.operator }}</span>
+                                <span>•</span>
+                                <span>{{ route.stops | length }} stops</span>
+                                <span>•</span>
+                                <span>{{ route.type | replace('_', ' ') | title }}</span>
+                            </div>
+                        </div>
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- ETA Display -->
+            <div class="eta-main">
+                <!-- Route Info Header -->
+                <div class="eta-route-header glass-card" id="eta-route-header" style="display: none;">
+                    <div class="eta-route-info">
+                        <span class="eta-route-badge" id="eta-badge">--</span>
+                        <div>
+                            <h3 class="eta-route-name" id="eta-route-name">Select a route</h3>
+                            <p class="eta-route-detail" id="eta-route-detail">Click on any route to view live ETAs</p>
+                        </div>
+                    </div>
+                    <div class="eta-status-legend">
+                        <span class="status-tag on-time">● On Time</span>
+                        <span class="status-tag delayed">● Delayed</span>
+                        <span class="status-tag late">● Late</span>
+                    </div>
+                </div>
+                
+                <!-- ETA Timeline -->
+                <div class="eta-timeline glass-card" id="eta-timeline">
+                    <div class="eta-empty" id="eta-empty">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <p>Select a bus route to view live ETA predictions</p>
+                    </div>
+                    
+                    <div class="eta-stops" id="eta-stops" style="display: none;">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+                
+                <!-- ETA Map -->
+                <div class="eta-map-wrap glass-card" id="eta-map-wrap" style="display: none;">
+                    <h4 class="panel-title">Route Map</h4>
+                    <div class="map-container" id="eta-map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initLiveETA();
+    });
+</script>
+{% endblock %}

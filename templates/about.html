@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}About — BUS TRANSIT AI{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="page-badge">Project Overview</span>
+        <h1 class="page-title">About <span class="accent">BUS TRANSIT AI</span></h1>
+        <p class="page-desc">AI-powered route optimization system for Coimbatore TNSTC city buses, built in 2024.</p>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="container">
+        <div class="about-grid">
+            <!-- Project Overview -->
+            <div class="about-card glass-card" id="about-overview">
+                <div class="about-icon green">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 12h4l3 9 4-18 3 9h4"/>
+                    </svg>
+                </div>
+                <h3>Project Overview</h3>
+                <p>BUS TRANSIT AI is an intelligent route optimization system designed for Coimbatore's TNSTC (Tamil Nadu State Transport Corporation) city bus network. The system leverages ensemble machine learning models and graph algorithms to provide optimal route predictions and live ETA estimates.</p>
+                <p>The application processes real transit datasets representing 53+ bus stops and 30+ TNSTC routes to deliver sub-2-second route optimization across the complete Coimbatore city bus network.</p>
+            </div>
+            
+            <!-- Architecture -->
+            <div class="about-card glass-card" id="about-architecture">
+                <div class="about-icon cyan">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <path d="M8 21h8M12 17v4"/>
+                    </svg>
+                </div>
+                <h3>System Architecture</h3>
+                <div class="arch-flow">
+                    <div class="arch-step">
+                        <span class="arch-num">1</span>
+                        <div>
+                            <strong>Data Layer</strong>
+                            <p>Coimbatore bus stops & TNSTC routes with GPS coordinates, synthetic traffic data (5000+ samples)</p>
+                        </div>
+                    </div>
+                    <div class="arch-step">
+                        <span class="arch-num">2</span>
+                        <div>
+                            <strong>ML Engine</strong>
+                            <p>Ensemble VotingRegressor: Random Forest (100 trees) + Gradient Boosting (150 trees) trained on 9 features</p>
+                        </div>
+                    </div>
+                    <div class="arch-step">
+                        <span class="arch-num">3</span>
+                        <div>
+                            <strong>Graph Engine</strong>
+                            <p>NetworkX weighted directed graph with dynamic edge weights from ML predictions. Dijkstra & A* pathfinding.</p>
+                        </div>
+                    </div>
+                    <div class="arch-step">
+                        <span class="arch-num">4</span>
+                        <div>
+                            <strong>Web Application</strong>
+                            <p>Flask backend serving interactive Leaflet.js maps, Chart.js analytics, and real-time ETA dashboards.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ML Details -->
+            <div class="about-card glass-card" id="about-ml">
+                <div class="about-icon purple">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3>Machine Learning Model</h3>
+                <div class="about-specs">
+                    <div class="spec-row">
+                        <span class="spec-label">Model Type</span>
+                        <span class="spec-value">Ensemble VotingRegressor</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Estimator 1</span>
+                        <span class="spec-value">Random Forest (100 trees, max_depth=12)</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Estimator 2</span>
+                        <span class="spec-value">Gradient Boosting (150 trees, lr=0.1)</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Features</span>
+                        <span class="spec-value">hour, day, weekend, peak, stops, distance, weather, congestion, passenger_load</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Target</span>
+                        <span class="spec-value">actual_travel_time_minutes</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Training Data</span>
+                        <span class="spec-value">5000 synthetic samples based on Coimbatore patterns</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Graph Algorithms -->
+            <div class="about-card glass-card" id="about-graph">
+                <div class="about-icon orange">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/>
+                        <circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/>
+                        <path d="M9 6h6M6 9v6M18 9v6M9 18h6"/>
+                    </svg>
+                </div>
+                <h3>Graph Algorithms</h3>
+                <div class="about-specs">
+                    <div class="spec-row">
+                        <span class="spec-label">Library</span>
+                        <span class="spec-value">NetworkX 3.2</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Graph Type</span>
+                        <span class="spec-value">Weighted Directed Graph (DiGraph)</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Fastest Route</span>
+                        <span class="spec-value">Dijkstra's Algorithm (min time weight)</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Shortest Route</span>
+                        <span class="spec-value">Dijkstra's Algorithm (min distance weight)</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Least Transfers</span>
+                        <span class="spec-value">Direct route detection + Dijkstra fallback</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Distance Metric</span>
+                        <span class="spec-value">Haversine formula (great-circle distance)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tech Stack -->
+            <div class="about-card glass-card full-width" id="about-tech">
+                <h3>Technology Stack</h3>
+                <div class="tech-stack-grid">
+                    <div class="tech-stack-item">
+                        <div class="tech-stack-category">Backend</div>
+                        <div class="tech-stack-items">
+                            <span class="tech-chip">Python 3.10+</span>
+                            <span class="tech-chip">Flask 3.0</span>
+                            <span class="tech-chip">NumPy</span>
+                            <span class="tech-chip">Pandas</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack-item">
+                        <div class="tech-stack-category">Machine Learning</div>
+                        <div class="tech-stack-items">
+                            <span class="tech-chip">Scikit-learn 1.3</span>
+                            <span class="tech-chip">Random Forest</span>
+                            <span class="tech-chip">Gradient Boosting</span>
+                            <span class="tech-chip">Joblib</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack-item">
+                        <div class="tech-stack-category">Graph Algorithms</div>
+                        <div class="tech-stack-items">
+                            <span class="tech-chip">NetworkX 3.2</span>
+                            <span class="tech-chip">Dijkstra</span>
+                            <span class="tech-chip">A* Search</span>
+                            <span class="tech-chip">Haversine</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack-item">
+                        <div class="tech-stack-category">Frontend</div>
+                        <div class="tech-stack-items">
+                            <span class="tech-chip">HTML5 / CSS3</span>
+                            <span class="tech-chip">JavaScript ES6</span>
+                            <span class="tech-chip">Leaflet.js</span>
+                            <span class="tech-chip">Chart.js</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack-item">
+                        <div class="tech-stack-category">Data</div>
+                        <div class="tech-stack-items">
+                            <span class="tech-chip">TNSTC Coimbatore</span>
+                            <span class="tech-chip">OpenStreetMap</span>
+                            <span class="tech-chip">GPS Coordinates</span>
+                            <span class="tech-chip">JSON / CSV</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
